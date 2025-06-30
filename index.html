@@ -6,7 +6,7 @@
     <title>Dokumentasi Kinerja Transmisi dan Instalasi</title>
     
     <!-- PWA: Link ke Manifest -->
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="./manifest.json">
     <!-- PWA: Warna tema untuk browser di mobile -->
     <meta name="theme-color" content="#007BFF">
     
@@ -70,7 +70,6 @@
     </style>
 </head>
 <body>
-    <!-- Konten HTML Body Anda tidak berubah -->
     <div class="container">
         <nav class="no-print">
             <a href="#" class="nav-link active" data-target="report-view">Lihat Laporan</a>
@@ -157,9 +156,7 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
     <script>
-        // Skrip utama aplikasi (sama seperti sebelumnya, sudah mencakup semua fitur)
         document.addEventListener('DOMContentLoaded', async () => {
-            // ... (seluruh kode JavaScript dari skrip sebelumnya diletakkan di sini) ...
             const navLinks = document.querySelectorAll('.nav-link');
             const views = document.querySelectorAll('.view');
             const formTitle = document.getElementById('form-title');
@@ -310,7 +307,7 @@
                         } catch (error) { console.error('Gagal berbagi:', error); } 
                         finally { button.disabled = false; button.textContent = originalButtonText; }
                     } else {
-                        alert('Browser Anda tidak mendukung pembagian file. Hanya teks yang akan dibagikan ke WhatsApp.');
+                        alert('Fitur berbagi tidak didukung di browser ini. Hanya teks yang akan disalin.');
                         const encodedPesan = encodeURIComponent(pesan + "\n\n(Gambar tidak dapat dilampirkan dari browser ini)");
                         window.open(`https://wa.me/?text=${encodedPesan}`, '_blank');
                     }
@@ -327,10 +324,6 @@
             const getLocationBtn = document.getElementById('get-location-btn');
             const locationStatus = document.getElementById('location-status');
             getLocationBtn.addEventListener('click', () => {
-                if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
-                    locationStatus.innerHTML = '<b>Fitur lokasi memerlukan koneksi aman (HTTPS).</b><br>Silakan akses dari link terinstal di Home Screen.';
-                    return;
-                }
                 if (!navigator.geolocation) {
                     locationStatus.textContent = 'Geolocation tidak didukung oleh browser ini.';
                     return;
