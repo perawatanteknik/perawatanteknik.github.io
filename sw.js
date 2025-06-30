@@ -1,5 +1,5 @@
 // Ganti versi ini SETIAP KALI Anda meng-upload perubahan baru ke index.html atau file lain.
-const CACHE_NAME = 'dokumentasi-kinerja-v10';
+const CACHE_NAME = 'dokumentasi-kinerja-v11';
 
 // Daftar file inti aplikasi yang harus selalu tersedia offline.
 const urlsToCache = [
