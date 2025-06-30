@@ -1,55 +1,56 @@
-// Nama cache
-const CACHE_NAME = 'dokumentasi-kinerja-v2'; // Versi baru
-// Daftar file yang akan di-cache
+// Nama cache - Ganti versi jika ada perubahan besar pada file aplikasi
+const CACHE_NAME = 'dokumentasi-kinerja-v4';
+
+// Daftar file yang akan di-cache. Gunakan path relatif.
 const urlsToCache = [
-  './', // Ini mengacu pada index.html
+  './',
   './index.html',
   './manifest.json',
-  './icon-192x192.png', // Jangan lupa tambahkan ikon ini
-  './icon-512x512.png', // Jangan lupa tambahkan ikon ini
+  './icon-192x192.png',
+  './icon-512x512.png',
   'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.wasm' // Penting untuk sql.js
+  'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.wasm'
 ];
 
 // Event 'install': dijalankan saat service worker pertama kali diinstal
 self.addEventListener('install', event => {
+  console.log('Service Worker: Menginstal...');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Cache dibuka, file sedang ditambahkan');
+        console.log('Service Worker: Caching file aplikasi...');
         return cache.addAll(urlsToCache);
       })
-  );
-});
-
-// Event 'fetch': dijalankan setiap kali ada permintaan dari aplikasi
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Jika permintaan ada di cache, kembalikan dari cache
-        if (response) {
-          return response;
-        }
-        // Jika tidak, coba ambil dari jaringan
-        return fetch(event.request);
-      }
-    )
+      .catch(err => {
+        console.error('Service Worker: Gagal cache file saat instalasi.', err);
+      })
   );
 });
 
 // Event 'activate': membersihkan cache lama jika ada versi baru
 self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
+  console.log('Service Worker: Mengaktifkan...');
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
+          if (cacheName !== CACHE_NAME) {
+            console.log('Service Worker: Menghapus cache lama:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
     })
+  );
+});
+
+// Event 'fetch': menangani semua permintaan jaringan dengan strategi "Cache First"
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        // Jika ada di cache, kembalikan dari cache. Jika tidak, ambil dari jaringan.
+        return response || fetch(event.request);
+      })
   );
 });
