@@ -1,5 +1,5 @@
 // Nama cache - Ganti versi jika ada perubahan besar pada file aplikasi
-const CACHE_NAME = 'dokumentasi-kinerja-v4';
+const CACHE_NAME = 'dokumentasi-kinerja-v5;
 
 // Daftar file yang akan di-cache. Gunakan path relatif.
 const urlsToCache = [
